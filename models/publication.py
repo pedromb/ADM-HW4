@@ -16,4 +16,4 @@ class Publication:
         self.id_str = id_str
         self.id_int = id_int
         self.title = title
-        
+
