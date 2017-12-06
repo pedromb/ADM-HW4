@@ -10,15 +10,12 @@ class Node:
     Class to represent a node in the graph
     Args:
         author: author
-        pubs: dictionary of publications for the author (id_int should be key)
-        confs: dictionary of conferences for the author (id_int should be key)
     '''
 
-    def __init__(self, author: Author, pubs: Publication=None,
-                 confs: Conference=None):
+    def __init__(self, author: Author):
         self.author = author
-        self.publications = pubs
-        self.conferences = confs
+        self.publications = {}
+        self.conferences = {}
 
     def add_publication(self, pub: Publication):
         '''
@@ -35,3 +32,17 @@ class Node:
             conf: conference to be added to the node
         '''
         self.conferences[conf.id_int] = conf
+
+    def print(self):
+        '''
+        Print node information
+        '''
+        print("-----Author-----")
+        print(self.author.print())
+        print("----Publications----")
+        for _, value in self.publications.items():
+            value.print()
+        print("----Conference----")
+        for _, value in self.conferences.items():
+            value.print()
+        print()
