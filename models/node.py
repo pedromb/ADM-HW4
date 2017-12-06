@@ -1,24 +1,21 @@
 '''
 Model to represent a node in the graph
 '''
-from author import Author
-from publication import Publication
-from conference import Conference
+from models.author import Author
+from models.publication import Publication
+from models.conference import Conference
 
 class Node:
     '''
     Class to represent a node in the graph
     Args:
         author: author
-        pubs: dictionary of publications for the author (id_int should be key)
-        confs: dictionary of conferences for the author (id_int should be key)
     '''
 
-    def __init__(self, author: Author, pubs: Publication=None,
-                 confs: Conference=None):
+    def __init__(self, author: Author):
         self.author = author
-        self.publications = pubs
-        self.conferences = confs
+        self.publications = {}
+        self.conferences = {}
 
     def add_publication(self, pub: Publication):
         '''
