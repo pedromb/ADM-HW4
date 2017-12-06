@@ -32,3 +32,17 @@ class Node:
             conf: conference to be added to the node
         '''
         self.conferences[conf.id_int] = conf
+
+    def print(self):
+        '''
+        Print node information
+        '''
+        print("-----Author-----")
+        print(self.author.print())
+        print("----Publications----")
+        for _, value in self.publications.items():
+            value.print()
+        print("----Conference----")
+        for _, value in self.conferences.items():
+            value.print()
+        print()
