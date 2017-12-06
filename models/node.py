@@ -1,9 +1,9 @@
 '''
 Model to represent a node in the graph
 '''
-from author import Author
-from publication import Publication
-from conference import Conference
+from models.author import Author
+from models.publication import Publication
+from models.conference import Conference
 
 class Node:
     '''
