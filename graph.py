@@ -5,10 +5,6 @@ import json
 import pickle
 import networkx as nx
 from conf import *
-from models.author import Author
-from models.publication import Publication
-from models.conference import Conference
-from models.node import Node
 import tqdm
 
 class Graph():
@@ -100,6 +96,49 @@ class Graph():
         jaccard = 1 - (len(pubs1.intersection(pubs2))/len(pubs1.union(pubs2)))
         return jaccard
     
+    def get_subgraph_conf(self, conference_id: int, reduced=False):
+        _graph = self.red_graph if reduced else self.graph
+        subgraph_ids = []
+        for node in _graph.nodes(data=True):
+            data = node[1]['data']
+            conferences = data['conferences']
+            try:
+                _ = conferences[conference_id]
+                subgraph_ids.append(node[0])
+            except KeyError:
+                pass
+        subgraph = _graph.subgraph(subgraph_ids)
+        return subgraph
+
+    def get_subgraph_author(self, author_id: int, d: int,reduced=False):
+        _graph = self.red_graph if reduced else self.graph
+        author_ids = [author_id]
+        subgraph_ids = []
+        node_list = [[author_id]]
+        set_author_id = set(node_list[0])
+        for i in range(d):
+            edges = []
+            for aut_id in author_ids:
+                edges.extend(list(_graph[aut_id].keys()))
+            author_ids = list(set(edges))
+            node_list.append(list(set(author_ids).difference(set_author_id)))
+            subgraph_ids.extend(author_ids)
+            set_author_id = set_author_id.union(set(author_ids))
+        subgraph = _graph.subgraph(subgraph_ids)
+        return subgraph, node_list
+
+
+    def _get_edges(self, author_id: int, d: int, reduced=False):
+        _graph = self.red_graph if reduced else self.graph
+        subgraph = []
+        edges = list(_graph.graph[author_id].keys())
+        if d == 0:
+            return edges
+        else:
+            for edge in edges:
+                subgraph.append(self._get_edges(edge, d-1, reduced))
+        return subgraph
+
     def _save_graph(self, reduced = False):
         filename = RED_GRAPH if reduced else GRAPH
         _graph = self.red_graph if reduced else self.graph
