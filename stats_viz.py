@@ -22,4 +22,4 @@ def viz_subgraph_author(author_id: int, d: int, reduced: bool = False):
     plt.legend(handles=legend_handles)
     plt.show()
 
-viz_subgraph_author(1,3)
+viz_subgraph_author(1, 3, reduced = False)

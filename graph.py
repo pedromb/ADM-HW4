@@ -3,10 +3,10 @@ Module to create and manipulate the graph
 '''
 import json
 import pickle
+import heapq as hp
 import networkx as nx
 from conf import *
 import tqdm
-
 class Graph():
     '''
     Class to create and manipulate a graph using the NetworkX package
@@ -23,7 +23,7 @@ class Graph():
                 self._load_graph(False)
             except:
                 self._create_graph(FULL_DATA, False)
-            
+
         
     def _create_graph(self, data_path, reduced = False):
         
@@ -153,3 +153,59 @@ class Graph():
                 self.red_graph = _graph
             else:
                 self.graph = _graph
+
+    def _shortest_path(self, start = None, finish = None, graph = None, cached = {}):
+        distances = {}
+        if start in cached:
+            for node in graph.nodes():
+                try:
+                    distances[node] = abs(cached[start] - cached[node])
+                except:
+                    distances[node] = float('inf')
+            return distances
+        else:
+            for node in graph.nodes():
+                if node == start:
+                    distances[node] = 0
+                else:
+                    distances[node] = float('inf')
+        try:
+            graph.node[start]
+        except:
+            return distances
+        p_queue = []
+        hp.heappush(p_queue, (0, start))
+        visited = set()
+        while p_queue:
+            dist, node = hp.heappop(p_queue)
+            if finish is not None:
+                if node == finish:
+                    return dist
+            if node not in visited:
+                visited.add(node)
+                for edge in graph.edges(node, data=True):
+                    neighbour = edge[1]  
+                    weigth = edge[2]['weight']
+                    _dist = dist + weigth
+                    if _dist < distances[neighbour]:
+                        distances[neighbour] = _dist
+                    if neighbour not in visited:
+                        hp.heappush(p_queue, (_dist, neighbour))
+        return distances
+
+    def set_group_number(self, nodes_list = None, reduced = False):
+            _graph = self.graph if not reduced else self.red_graph
+            nodes = _graph.nodes()
+            self.group_numbers_red = {}
+            self.group_numbers = {}
+            _group_numbers = self.group_numbers if not reduced else self.group_numbers_red
+            dists = []
+            paths = None
+            cached = {}
+            for sub_node in tqdm.tqdm(nodes_list):
+                distances = self._shortest_path(start=sub_node, graph=_graph, cached = cached)
+                cached.update(distances)
+                dists.append(distances)
+            for node in nodes:
+                _group_numbers[node] = min([dist[node] for dist in dists])
+            
