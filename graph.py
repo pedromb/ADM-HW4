@@ -8,6 +8,7 @@ import networkx as nx
 from conf import *
 import tqdm
 class Graph():
+    
     '''
     Class to create and manipulate a graph using the NetworkX package
     '''
@@ -154,25 +155,28 @@ class Graph():
             else:
                 self.graph = _graph
 
-    def _shortest_path(self, start = None, finish = None, graph = None, cached = {}):
+    def aris_distance(self, reduced = False, author_id = -1):
+        _graph = self.graph if not reduced else self.red_graph
+        aris = None
+        # Find Aris
+        for node in _graph.nodes():
+            author_name = _graph.node[node]['data']['author']['name']
+            if 'aris anagnostopoulos' == author_name.lower():
+                aris = node
+                break
+        if aris is None:
+            print('Aris not found')
+            return None
+        dist = self._shortest_path(start=author_id, finish = aris, graph=_graph)
+        return dist
+
+    def _shortest_path(self, start = None, finish = None, graph = None):
         distances = {}
-        if start in cached:
-            for node in graph.nodes():
-                try:
-                    distances[node] = abs(cached[start] - cached[node])
-                except:
-                    distances[node] = float('inf')
-            return distances
-        else:
-            for node in graph.nodes():
-                if node == start:
-                    distances[node] = 0
-                else:
-                    distances[node] = float('inf')
-        try:
-            graph.node[start]
-        except:
-            return distances
+        for node in graph.nodes():
+            if node == start:
+                distances[node] = 0
+            else:
+                distances[node] = float('inf')
         p_queue = []
         hp.heappush(p_queue, (0, start))
         visited = set()
@@ -194,18 +198,24 @@ class Graph():
         return distances
 
     def set_group_number(self, nodes_list = None, reduced = False):
-            _graph = self.graph if not reduced else self.red_graph
-            nodes = _graph.nodes()
-            self.group_numbers_red = {}
-            self.group_numbers = {}
-            _group_numbers = self.group_numbers if not reduced else self.group_numbers_red
-            dists = []
-            paths = None
-            cached = {}
-            for sub_node in tqdm.tqdm(nodes_list):
-                distances = self._shortest_path(start=sub_node, graph=_graph, cached = cached)
-                cached.update(distances)
-                dists.append(distances)
-            for node in nodes:
-                _group_numbers[node] = min([dist[node] for dist in dists])
+        _graph = self.graph if not reduced else self.red_graph
+        nodes = _graph.nodes()
+        self.group_numbers_red = {}
+        self.group_numbers = {}
+        _group_numbers = self.group_numbers if not reduced else self.group_numbers_red
+        dists = []
+        for sub_node in tqdm.tqdm(nodes_list):
+            distances = self._shortest_path(start=sub_node, graph=_graph)
+            dists.append(distances)
+        for node in nodes:
+            _group_numbers[node] = min([dist[node] for dist in dists])
+    
+    def get_centralities(self, reduced=False, graph=None):
+        degree = nx.degree_centrality(graph) 
+        closeness = nx.closeness_centrality(graph)
+        betweenness = nx.betweenness_centrality(graph)
+        return degree, closeness, betweenness
+
+    def _get_graph(self, reduced=False):
+        return self.graph if not reduced else self.red_graph
             

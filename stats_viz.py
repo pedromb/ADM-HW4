@@ -4,8 +4,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
+def viz_centralities(conf_id:int, reduced: bool = False):
+    g = Graph(reduced)
+    sub = g.get_subgraph_conf(conf_id, reduced)
+    d, c, b = g.get_centralities(reduced, sub)
+
 def viz_subgraph_author(author_id: int, d: int, reduced: bool = False):
-    g = Graph()
+    g = Graph(reduced)
     sub, node_list = g.get_subgraph_author(author_id, d, reduced)
     pos = nx.fruchterman_reingold_layout(sub)
     legend_handles = []
