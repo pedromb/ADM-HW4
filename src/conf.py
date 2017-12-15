@@ -1,3 +1,6 @@
+'''
+Configuration variables for the project
+'''
 DATA_FOLDER = "data"
 FULL_DATA = "{}/full_dblp.json".format(DATA_FOLDER)
 RED_DATA = "{}/reduced_dblp.json".format(DATA_FOLDER)
