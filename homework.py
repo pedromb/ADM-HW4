@@ -6,7 +6,6 @@ import getopt
 import json
 from src.graph import Graph
 import networkx as nx
-import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
@@ -39,8 +38,9 @@ def viz_subgraph_author(author_id: int, max_hop_dist: int, reduced: bool = False
     pos = nx.fruchterman_reingold_layout(subgraph)
     legend_handles = []
     plt.figure(figsize=(16, 12))
+    cmap = plt.cm.get_cmap('hsv', len(node_list)+1)
     for index, value in enumerate(node_list):
-        color = np.random.rand(3,)
+        color = cmap(index)
         if index == 0:
             label = "Root"
         else:
@@ -61,9 +61,32 @@ def aris_distance(author_id: int, reduced: bool = False):
             to create the graph, otherwise it will use the full data
     '''
     graph = Graph(reduced)
-    print("Getting shortest path weight between {} and Aris\n"\
-        .format(str(author_id)))
-    return graph.aris_distance(author_id)
+    author_name = graph.get_author_name(author_id)
+    print("Getting shortest path weight between {} and Aris\n".format(author_name))
+    path = graph.aris_distance(author_id)
+    edge_labels = []
+    if path is not None:
+        aris_graph = nx.Graph()
+        aris_graph.add_node(path[0][2])
+        for i in range(0, len(path)-1):
+            current = path[i]
+            next_n = path[i+1]
+            aris_graph.add_node(next_n[2])
+            aris_graph.add_edge(current[2], next_n[2], {"weight":next_n[1]})
+            edge_labels.append(((current[2], next_n[2]), round(abs(current[1]-next_n[1]), 2)))
+        pos = nx.fruchterman_reingold_layout(aris_graph)
+        cmap = plt.cm.get_cmap('hsv', len(path)+1)
+        plt.figure(figsize=(16, 12))
+        nx.draw_networkx_edge_labels(aris_graph, pos, edge_labels=dict(edge_labels))
+        for index, value in enumerate(path):
+            color = cmap(index)
+            nx.draw_networkx(aris_graph, pos=pos, nodelist=[value[2]], node_color=color,
+                             with_labels=True, node_size=1500)
+        plt.title('Shortest path between Aris and {} = {}'\
+            .format(author_name, str(round(path[-1][1], 4))))
+        plt.show()
+    else:
+        print("There is no path between Aris and {}".format(author_name))
 
 def group_numbers(nodes_list: list, reduced: bool = False):
     '''
@@ -82,7 +105,7 @@ def group_numbers(nodes_list: list, reduced: bool = False):
         json.dump(graph.group_numbers, jfile)
         print("group_numbers.json available under current directory\n")
 
-def dispatcher(exercise:str, letter:str, reduced:bool):
+def dispatcher(exercise: str, letter: str, reduced: bool):
     '''
     Dispatches functions to solve exercises
     Args:
@@ -112,9 +135,7 @@ def dispatcher(exercise:str, letter:str, reduced:bool):
         try:
             print("\nInput author id: ", end="")
             author_id = int(input())
-            dist = aris_distance(author_id, reduced)
-            print("Shortest path between {} and Aris has weight = {}\n"\
-                .format(str(author_id), str(dist)))
+            aris_distance(author_id, reduced)
         except ValueError:
             print("Author id should be integer")
             sys.exit(0)

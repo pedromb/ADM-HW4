@@ -149,7 +149,7 @@ class Graph():
         if not self.__check_node(author_id):
             sys.exit(2)
         author_ids = [author_id]
-        subgraph_ids = []
+        subgraph_ids = [author_id]
         node_list = [[author_id]]
         set_author_id = set(node_list[0])
         for _ in range(max_hop_dist):
@@ -160,7 +160,7 @@ class Graph():
             node_list.append(list(set(author_ids).difference(set_author_id)))
             subgraph_ids.extend(author_ids)
             set_author_id = set_author_id.union(set(author_ids))
-        subgraph = self.graph.subgraph(subgraph_ids)
+        subgraph = self.graph.subgraph(set(subgraph_ids))
         return subgraph, node_list
 
     def aris_distance(self, author_id: int):
@@ -169,7 +169,10 @@ class Graph():
         Args:
             author_id: The integer id of an author
         Returns:
-            The shortest distance between author_id and Aris
+            A path as a tuple where element 0 is the author id, 
+            element 1 is the distance between the author and aris
+            and element 2 is the authors name.
+            If author_id does not exist on graph it returns None
         '''
 
         aris_node = None
@@ -182,8 +185,22 @@ class Graph():
         if aris_node is None:
             print('Aris not found')
             return None
-        dist = self.shortest_path(start=aris_node, finish=author_id, graph=self.graph)
-        return dist
+        distances, prev = self.shortest_path(start=aris_node, finish=author_id, graph=self.graph)
+        if prev is not None:
+            try:
+                prev[author_id]
+            except KeyError:
+                return None
+            path = [(author_id, distances[author_id], self.get_author_name(author_id))]
+            control = prev[author_id]
+            while control != aris_node:
+                aut_name = self.get_author_name(control)
+                path.append((control, distances[control], aut_name))
+                control = prev[control]
+            path.append((aris_node, 0, 'Aris Anagnostopoulos'))
+            return path[::-1]
+        else:
+            return None
 
     def shortest_path(self, start: int, graph: nx.Graph, finish=None):
         '''
@@ -195,20 +212,20 @@ class Graph():
             graph: The graph object to look for the shortest path
             finish (int): The destination node to find the shortest path
         Returns:
-            If finish given: the shortest distance (float) between start and
-                node on graph.
-            Othewise: a dict with the shortest distance between start and all
-                the other nodes on graph.
+            A tuple where element 0 dict is the shortest path between start
+            and all the other nodes, and element 1 is a dict with the node as
+            a key and the value is the previous node on the path to that node.
+            If finish is given the iteration stops when finds finish but it still
+            returns the same tuple
         '''
 
         distances = {}
+        prev = {}
         for node in graph.nodes():
             distances[node] = float('inf')
         distances[start] = 0
-        if not self.__check_node(start):
-            return distances
-        if finish is not None and not self.__check_node(finish):
-            return float('inf')
+        if not self.__check_node(start) or finish is not None and not self.__check_node(finish):
+            return distances, None
         p_queue = []
         hp.heappush(p_queue, (0, start))
         visited = set()
@@ -216,7 +233,7 @@ class Graph():
             dist, node = hp.heappop(p_queue)
             if finish is not None:
                 if node == finish:
-                    return dist
+                    return distances, prev
             if node not in visited:
                 visited.add(node)
                 for edge in graph.edges(node, data=True):
@@ -225,9 +242,10 @@ class Graph():
                     _dist = dist + weigth
                     if _dist < distances[neighbour]:
                         distances[neighbour] = _dist
+                        prev[neighbour] = node
                     if neighbour not in visited:
                         hp.heappush(p_queue, (_dist, neighbour))
-        return distances
+        return distances, prev
 
     def set_group_number(self, nodes_list: list):
         '''
@@ -243,7 +261,7 @@ class Graph():
         nodes = self.graph.nodes()
         dists = []
         for sub_node in tqdm.tqdm(nodes_list, desc="Setting group numbers..."):
-            distances = self.shortest_path(start=sub_node, graph=self.graph)
+            distances, _ = self.shortest_path(start=sub_node, graph=self.graph)
             dists.append(distances)
         for node in nodes:
             self.group_numbers[node] = min([dist[node] for dist in dists]) \
@@ -300,3 +318,13 @@ class Graph():
         except KeyError:
             print("Author id {} does not exist on graph".format(str(node)))
             return False
+
+    def get_author_name(self, author_id: int):
+        '''
+        Get author name from graph
+        Args:
+            author_id: id of the author
+        Return:
+            The name of the author as a string
+        '''
+        return self.graph.node[author_id]['data']['author']['name'].title()
