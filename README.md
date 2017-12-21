@@ -17,12 +17,12 @@ Since exercise 1 is just creating the graph by running any other exercise you ca
 
 ### Exercise 1
 
-In order to process the JSON files, it has been created a proper class called Graph. The instantiation of a Graph object can initialize two different processes:
+In order to process the JSON files, it has been created a proper class called **Graph**. The instantiation of a Graph object can initialize two different processes:
 
 - If a Graph object is not present in the folder you are working in, it start the process of creation of the whole graph starting from the JSON file.
 - If a Graph object is present in the folder you are working in, then it is loaded and all the following processes will work on the loaded graph.
 
-In the instantiation you can also specify whether you want to use the reduced file (reduced_dbsl.json) or the full file (dbsl.json) to create the graph.
+In the instantiation you can also specify whether you want to use the reduced file (*reduced_dbsl.json*) or the full file (*dbsl.json*) to create the graph.
 
 If it has to create the graph, he start to parse the JSON file. Since every document is a publication, we take for each document the author(s), and for each one, if it hasn't been done yet before, it is created a node in the graph. And since every edge links two authors that at least have one publication in common, for each document are added all the possible edges between the nodes that represents the authors, obviously whether they already don't exists.
 
@@ -39,20 +39,20 @@ Visualization part...
 
 #### Letter B
 
-Basically it starts looking for the nodes that are at maximum distance equal to the one in input. Then it run the NetworkX function "subgraph" to return the induced subgraph composed of that nodes.
+Basically it starts looking for the nodes that are at maximum distance from the input node (*root*) equal to the one in input (*d*). Then it run the NetworkX function *"subgraph"* to return the induced subgraph composed of that nodes.
 
 In order to perform this, it uses three different variables:
 
-- author_ids,a list where at the i-th loop contains the nodes at distance i from the root
+- *author_ids*, a list where at the *i*-th loop contains the nodes at distance *i* from *root*
 
-- subgraph_ids where there are saved all the nodes from the root one to the ones at distance d.
+- *subgraph_ids* where there at the *i*-th loop contains all the nodes that has distance less or equal to *i* from *root*
 
-- node_list, a nested list where i-th element is a list of the nodes at distance i to the root. It is useful to make the colors for the visualization.
+- *node_list*, a nested list where *i*-th element is a list of the nodes at distance *i* from *root*.
 
-Then:
+Practically, what the program does is:
 
-1) Take the nodes connected from the root and save them in author_ids, in order to take at the next iteration their neighbors
-2) Extend subgraph_ids list with author_ids.
-3) Append author_ids to nodes_list.
+1) Take the nodes connected from *root* and save them in *author_ids*, in order to take at the next iteration their neighbors
+2) Extend *subgraph_ids* list with *author_ids*
+3) Append *author_ids* to *nodes_list*
 
-It does this d times. Doing in this way, at the end it has in subraph_ids all the nodes it visited, and in node_list the same nodes but divided according to their distance from the root node. It creates the subgraph and returns it and node_list. Then for the visualization, we used the Fruchterman-Reingold layout, that is one of the force-directed graph drawing algorithms provided by NetworkX library. We gave different colors to the nodes, according to their distance to the root node, and the colors are given at random every time you run the program.
+It does this *d* times. Doing in this way, at the end it has in *subgraph_ids* all the nodes it visited, and in *node_list* the same nodes but divided according to their distance from the root node. It creates the subgraph and returns it and node_list. Then for the visualization, we used the Fruchterman-Reingold layout, that is one of the force-directed graph drawing algorithms provided by NetworkX library. We gave different colors to the nodes, according to their distance to the root node, and the colors are given at random every time you run the program.
