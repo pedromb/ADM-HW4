@@ -54,4 +54,10 @@ To solve both problems we implemented Dijkstra's algorithm to find the shortest 
 
 Below we show some results for the shortest path between Aris and some authors.
 
+![](plots/3_a_arisdistance1.png)
+
+![](plots/3_a_arisdistance2.png)
+
+![](plots/3_a_arisdistance3.png)
+
 It is important to notice that Aris is not connected to all the authors, so for some authors there will not be a shortest path between them and Aris.
