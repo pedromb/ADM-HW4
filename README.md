@@ -15,6 +15,36 @@ If reduced is 1 it uses the reduced dataset to create the graph, if reduced is 0
 Since exercise 1 is just creating the graph by running any other exercise you can actually check if the graph was created correctly. If you wish to check the graph directly create an instance of the Graph class from src/graph.py module and access the graph attribute.
 
 
+
+### Files
+
+#### src/graph.py
+
+Module to create and manipulate the graph. For further details on the functions, check the code.
+
+#### src/conf.py
+
+Module to store all the configuration variables needed.
+
+#### homework.py
+
+Module to execute the different exercises of the homework.
+
+#### plots
+
+Folder with plots used in the report
+
+#### requirements.txt
+
+Text file with packages required to run the code.
+
+#### report.pdf
+
+Report of the results we got during this work.
+
+
+
+
 ### Exercise 1
 
 In order to process the JSON files, it has been created a proper class called **Graph**. The instantiation of a Graph object can initialize two different processes:
