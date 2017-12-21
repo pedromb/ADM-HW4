@@ -5,5 +5,6 @@ g <- ggplot(data) +
     ggtitle("Percentage of the Component by Hop Distance") +
     ylab("Percentage of Component") +
     xlab("Maximum Hop Distance") + 
-    theme(plot.title = element_text(hjust = 0.5))
+    theme(plot.title = element_text(hjust = 0.5)) +
+    scale_x_discrete(limits=seq(0,10))
 g

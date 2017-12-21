@@ -1,3 +1,12 @@
+---
+title: "Report"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 ## Exercise 1
 
 For the first exercise we had to create a graph whose nodes are authors, and two nodes are connected if they share, at least, one publication. Each edge is weighted in the following way: w(a1, a2) = 1 - J(p1, p2). Where J(p1, p2) is the Jaccard similarity between the set of publications p1 and p2 of each author.
@@ -24,8 +33,8 @@ On this exercise we had to get the subgraph induced by the nodes that have hop d
 
 We observe two things:
     
-    1. Because the graph is not connected we can never get the whole graph, even for a big hop distance.
-    2. For a small number (between 6 and 10) of maximum hop distance we get almost the whole connected component for one author.
+1. Because the graph is not connected we can never get the whole graph, even for a big hop distance.
+2. For a small number (between 6 and 10) of maximum hop distance we get almost the whole connected component for one author.
 
 Let's see the behaviour observed on 2.
 
@@ -33,18 +42,16 @@ For author who has id = 256176 (Aris Anagnostopoulos), the connected component h
 
 ![](plots/2_b_percentage_component.png)
 
-Just to illustrate we show the graph for when maximum hop distance is equal to 2.
+Just to illustrate we show the graph for when maximum hop distance is equal to 1.
 
-![](plots/2_b_percentage_component.png)
+![](plots/2_b_aris_subgraph.png)
 
 # Exercise 3
 
-## Letter A
+For this exercise we had to implement a strategy to find the shortest path, on letter A we had to find the shortest path between an author and Aris, for letter B we had to find the shortest path between each node on a set of nodes and all the other nodes in the graph.
 
-For this exercise we had to find the shortest path between Aris and a given author. To solve this problem we implemented Dijkstra's algorithm to find the shortest path.
+To solve both problems we implemented Dijkstra's algorithm to find the shortest path. The implementation uses a priority queue (heap), to improve the performance. For letter A we stop the execution when we find the given author, in the other hand, on letter B we run Dijkstra's for each node on the subset of nodes and then get the minimum value for each node, if two nodes are not connected we set the distance as infinity.
 
-Below we show some results.
+Below we show some results for the shortest path between Aris and some authors.
 
 It is important to notice that Aris is not connected to all the authors, so for some authors there will not be a shortest path between them and Aris.
-
-## Letter B
