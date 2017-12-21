@@ -28,17 +28,18 @@ class Graph():
         except FileNotFoundError:
             print("\nGraph not found, will create graph from dataset\n")
             data = RED_DATA if reduced else FULL_DATA
-            self.graph = self.__create_graph(data, reduced)
+            self.graph = self.__create_graph(data)
             self.__save_graph(reduced)
             print("\nFinished\n")
         self.group_numbers = {}
 
-    def __create_graph(self, data_path: str, reduced: bool = False):
+    def __create_graph(self, data_path: str):
         '''
         Function to create the graph using NetworkX.
-        The graph object will be accesible on the graph attribute
-        Args
+        Args:
             data_path: The path to the json file with the graph data
+        Returns:
+            A NetworkX graph object
         '''
         with open(data_path) as data_file:
             data = json.load(data_file)

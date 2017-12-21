@@ -35,6 +35,9 @@ def viz_subgraph_author(author_id: int, max_hop_dist: int, reduced: bool = False
     '''
     graph = Graph(reduced)
     subgraph, node_list = graph.get_subgraph_author(author_id, max_hop_dist)
+    author_component = nx.node_connected_component(graph.graph, author_id)
+    per = round((len(subgraph.nodes())/len(author_component))*100, 2)
+    print("Percentage of component = {}".format(str(per)))
     pos = nx.fruchterman_reingold_layout(subgraph)
     legend_handles = []
     plt.figure(figsize=(16, 12))
