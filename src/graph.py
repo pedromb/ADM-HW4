@@ -151,16 +151,14 @@ class Graph():
         author_ids = [author_id]
         subgraph_ids = [author_id]
         node_list = [[author_id]]
-        set_author_id = set(node_list[0])
         for _ in range(max_hop_dist):
             edges = []
             for aut_id in author_ids:
                 edges.extend(list(self.graph[aut_id].keys()))
-            author_ids = list(set(edges))
-            node_list.append(list(set(author_ids).difference(set_author_id)))
+            author_ids = list(set(edges).difference(set(subgraph_ids)))
+            node_list.append(list(set(author_ids)))
             subgraph_ids.extend(author_ids)
-            set_author_id = set_author_id.union(set(author_ids))
-        subgraph = self.graph.subgraph(set(subgraph_ids))
+        subgraph = self.graph.subgraph(subgraph_ids)
         return subgraph, node_list
 
     def aris_distance(self, author_id: int):
