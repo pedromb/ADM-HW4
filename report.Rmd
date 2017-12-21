@@ -1,5 +1,5 @@
 ---
-title: "Report"
+title: "Homework 4 - Algorithmic Methods for Data Mining"
 output: pdf_document
 ---
 
@@ -9,9 +9,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Exercise 1
 
-For the first exercise we had to create a graph whose nodes are authors, and two nodes are connected if they share, at least, one publication. Each edge is weighted in the following way: w(a1, a2) = 1 - J(p1, p2). Where J(p1, p2) is the Jaccard similarity between the set of publications p1 and p2 of each author.
+For the first exercise we had to create a graph whose nodes are authors, and two nodes are connected if they share, at least, one publication. Each edge is weighted in the following way: $$w(a_1, a_2) = 1 - J(p_1, p_2)$$ Where $J(p_1, p_2)$ is the Jaccard similarity between the set of publications $p_1$ and $p_2$ of each author.
 
-The resulting graph (when using the full dataset) is a disconnected graph with a total of 904664 nodes and 3679331 edges. The implication of being a disconnected graph is that not all nodes are reachable from every other node, meaning, for a specific pair of nodes n1 and n2, there might not be a path that connects n1 and n2. Moreover, if the weight of the edge, w(a1, a2), between a1 and a2 is equal to 0 it means that nodes a1 and a2 only published between each other.
+The resulting graph (when using the full dataset) is a disconnected graph with a total of 904664 nodes and 3679331 edges. The implication of being a disconnected graph is that not all nodes are reachable from every other node, meaning, for a specific pair of nodes $n_1$ and $n_2$, there might not be a path that connects $n_1$ and $n_2$. Moreover, if the weight of the edge, $w(a_1, a_2)$, between $a_1$ and $a_2$ is equal to 0 it means that nodes $a_1$ and $a_2$ only published between each other.
 
 # Exercise 2
 
