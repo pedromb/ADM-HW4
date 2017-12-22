@@ -9,20 +9,6 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-def viz_centralities_conf(conf_id: int, reduced: bool = False):
-    '''
-    Visualize the centralities from the subgraph induced by the set
-    of authors who published at conf_id
-    Args:
-        conf_id: The integer id of the conference to geneate the subgraph
-        reduced: If reduced equals true it will use the reduced data
-            to create the graph, otherwise it will use the full data
-    '''
-    graph = Graph(reduced)
-    subgraph = graph.get_subgraph_conf(conf_id)
-    degree, closeness, betweenness = graph.get_centralities(subgraph)
-    raise NotImplementedError
-
 def viz_subgraph_author(author_id: int, max_hop_dist: int, reduced: bool = False):
     '''
     Visualize the subgraph induced by nodes that have hop distance at most
@@ -116,15 +102,7 @@ def dispatcher(exercise: str, letter: str, reduced: bool):
         letter: the letter of the exercise
         reduced: to use reduced data or not
     '''
-    if exercise == '2' and letter == 'a':
-        try:
-            print("\nInput conference id: ", end="")
-            conf_id = int(input())
-            viz_centralities_conf(conf_id, reduced)
-        except ValueError:
-            print("Conferece id should be an integer")
-            sys.exit(0)
-    elif exercise == '2' and letter == 'b':
+    if exercise == '2' and letter == 'b':
         try:
             print("\nInput author id: ", end="")
             author_id = int(input())
@@ -152,7 +130,8 @@ def dispatcher(exercise: str, letter: str, reduced: bool):
             sys.exit(0)
     else:
         message = "Exercise does not exist. If you tried exercise 1 you can \
-just create a Graph object from the graph module."
+just create a Graph object from the graph module. If you tried exercise 2/a, please \
+check the exercise2a.ipynb notebook instead"
         print(message)
 
 def main(argv):

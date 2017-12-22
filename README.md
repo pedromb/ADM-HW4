@@ -12,8 +12,9 @@ python3 homework.py -e <exercise_number> -l <exercise_letter> -r <reduced_data>
 
 If reduced is 1 it uses the reduced dataset to create the graph, if reduced is 0 it uses the full dataset to create the graph.
 
-Since exercise 1 is just creating the graph by running any other exercise you can actually check if the graph was created correctly. If you wish to check the graph directly create an instance of the Graph class from src/graph.py module and access the graph attribute.
+Since exercise 1 is just creating the graph, by running any other exercise you can actually check if the graph was created correctly. If you wish to check the graph directly create an instance of the Graph class from src/graph.py module and access the graph attribute.
 
+If you tried exercise 2/a please check the ipython notebook on file exercise2a.ipynb
 
 
 ### Files
@@ -26,9 +27,17 @@ Module to create and manipulate the graph. For further details on the functions,
 
 Module to store all the configuration variables needed.
 
+#### src/plot_ly.py
+
+Module to create plotly plot for the graph
+
 #### homework.py
 
 Module to execute the different exercises of the homework.
+
+#### exercise2a.ipynb
+
+IPython notebook to visualize the centrality measures as per exercise 2 a
 
 #### plots
 
