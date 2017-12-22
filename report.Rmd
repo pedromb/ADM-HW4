@@ -1,6 +1,6 @@
 ---
 title: "Homework 4 - Algorithmic Methods for Data Mining"
-author: "Pedro Bernardo, Tommaso Lanciano, Alessandro Pennacchia"
+author: "Pedro Magalhães Bernardo, Tommaso Lanciano, Alessandro Pennacchia"
 output: pdf_document
 ---
 

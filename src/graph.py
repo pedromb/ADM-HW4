@@ -276,7 +276,7 @@ class Graph():
             A tuple of dictionaries with degree, closeness and
             betweenness centralities for each on graph
         '''
-        degree = nx.degree(graph, weight='weight')
+        degree = nx.degree(graph)
         closeness = nx.closeness_centrality(graph, distance='weight')
         betweenness = nx.betweenness_centrality(graph,  weight='weight')
         return degree, closeness, betweenness
