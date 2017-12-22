@@ -14,7 +14,7 @@ If reduced is 1 it uses the reduced dataset to create the graph, if reduced is 0
 
 Since exercise 1 is just creating the graph, by running any other exercise you can actually check if the graph was created correctly. If you wish to check the graph directly create an instance of the Graph class from src/graph.py module and access the graph attribute.
 
-If you tried exercise 2/a please check the ipython notebook on file exercise2a.ipynb
+Since the library *plotly* works only on Ipython notebook, if you tried exercise 2/a please check **exercise2a.ipynb** file.
 
 
 ### Files
@@ -37,7 +37,7 @@ Module to execute the different exercises of the homework.
 
 #### exercise2a.ipynb
 
-IPython notebook to visualize the centrality measures as per exercise 2 a
+IPython notebook to visualize the centrality measures as per exercise 2a
 
 #### plots
 
@@ -73,7 +73,7 @@ Once all the nodes and the edges were created, it computes the weights according
 
 Given the conference in input, it looks up in the graph through all the authors (nodes), and saves the ones that have at least published once in the given conference. Once obtained all the nodes it needs, run the function "subgraph" of NetworkX, that returns a graph object that is nothing but the subgraph induced we were looking for.
 
-Visualization part...
+For the visualization of the graph, it has been used the library *plotly*. It provides tools to make interactive plots. In fact, if you run exercise2a.ipynb, you can interact with the plot, zooming in and out, shifting from a part of the graph to another. There is also a color scale that makes easier the comprehension of the different centralities measures of the nodes.
 
 #### Letter B
 
